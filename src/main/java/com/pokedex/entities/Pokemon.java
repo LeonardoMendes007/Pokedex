@@ -13,12 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "pokemon")
 public class Pokemon implements Serializable {
@@ -74,14 +77,6 @@ public class Pokemon implements Serializable {
 		this.weight = weight;
 		this.gender = gender;
 		this.imgUrl = imgUrl;
-	}
-
-	public void addTypes(List<Type> types) {
-		types.addAll(types);
-	}
-
-	public void addType(Type type) {
-		types.add(type);
 	}
 
 }

@@ -17,11 +17,11 @@ public class PokemonService {
 
 	@Autowired
 	private PokemonRepository repPokemon;
-	
-	public List<Pokemon> findAll(){
+
+	public List<Pokemon> findAll() {
 		return repPokemon.findAll();
 	}
-	
+
 	public Pokemon findById(Integer id) {
 		Optional<Pokemon> obj = repPokemon.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException("Id " + id + " does not exist"));
@@ -30,18 +30,22 @@ public class PokemonService {
 	public Page<Pokemon> findAll(Pageable pageable) {
 		return repPokemon.findAll(pageable);
 	}
-	
-	public List<Pokemon> findAllByType(Integer id) {
-		
-		List<Pokemon> pokemons = repPokemon.findAllPokemonByType(id);
-		
-		if(pokemons.size() == 0) {
-			throw new ResourceNotFoundException("Id " + id + " does not exist");
-		}else {
-			return pokemons;	
-		}
-		 
-	}
 
+	public Page<Pokemon> findAllByType(Integer id, Pageable pageable) {
+
+		Page<Pokemon> pokemons = repPokemon.findAllPokemonByType(id,pageable);
+
+		if (pokemons.isEmpty()) {
+			throw new ResourceNotFoundException("Id " + id + " does not exist");
+		} else {
+			return pokemons;
+		}
+
+	}
+	
+	public Pokemon save(Pokemon pokemon) {
+		Pokemon pokemonSave = repPokemon.save(pokemon);
+		return pokemonSave;
+	}
 
 }
