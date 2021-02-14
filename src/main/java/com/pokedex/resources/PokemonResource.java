@@ -38,6 +38,9 @@ public class PokemonResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<PokemonForm> getPokemonById(@PathVariable("id") Integer id) {
 		Pokemon pokemon = service.findById(id);
+		
+		System.err.println(pokemon.getTypes().size());
+		
 		PokemonForm pokemonForm = new PokemonForm(pokemon.getId(), pokemon.getName(), pokemon.getHeight(),
 				pokemon.getWeight(), pokemon.getGender(), pokemon.getImgUrl(), pokemon.getTypes(),
 				pokemon.getWeaknesses(), pokemon.getNextEvolution(), pokemon.getPreviusEvolution());
@@ -52,15 +55,19 @@ public class PokemonResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Pokemon> savePokemon(@RequestBody @Valid PokemonForm pokemonForm) {
+	public ResponseEntity<PokemonForm> savePokemon(@RequestBody @Valid PokemonForm pokemonForm) {
 
 		Pokemon pokemon = pokemonForm.novoPokemon();
 		
 		Pokemon pokemonSave = service.save(pokemon);
+		
+		PokemonForm pokemonFormSave =  new PokemonForm(pokemonSave.getId(), pokemonSave.getName(), pokemonSave.getHeight(),
+				pokemonSave.getWeight(), pokemonSave.getGender(), pokemonSave.getImgUrl(), pokemonSave.getTypes(),
+				pokemonSave.getWeaknesses(), pokemonSave.getNextEvolution(), pokemonSave.getPreviusEvolution());
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(pokemon.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(pokemonSave);
+		return ResponseEntity.created(uri).body(pokemonFormSave);
 	}
 
 }

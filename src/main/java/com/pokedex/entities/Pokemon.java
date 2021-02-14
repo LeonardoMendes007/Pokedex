@@ -12,9 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -31,7 +35,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "pokemon")
 public class Pokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,16 +42,14 @@ public class Pokemon implements Serializable {
 	@Id
 	private Integer id;
 	@Column(unique = true, length = 30, nullable = false)
-	@NotBlank
 	private String name;
-	@NotNull
+	@NotNull(message = "{height.not.null}")
 	private Double height;
-	@NotNull
+	@NotNull(message = "{weight.not.null}")
 	private Double weight;
 	@Column(length = 2)
-	@NotBlank
 	private String gender;
-	@URL
+	
 	private String imgUrl;
 
 	@ManyToMany
@@ -78,5 +79,7 @@ public class Pokemon implements Serializable {
 		this.gender = gender;
 		this.imgUrl = imgUrl;
 	}
+	
+	
 
 }

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,29 +25,26 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "type")
 public class Type {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@NotBlank
 	@Column(length = 20)
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "types")
 	@JsonIgnore
-	private Set<Pokemon> pokemonsTypes = new HashSet<>(); 
-	
+	private Set<Pokemon> pokemonsTypes = new HashSet<>();
+
 	@ManyToMany(mappedBy = "weaknesses")
 	@JsonIgnore
-	private Set<Pokemon> pokemonsWeaknesses = new HashSet<>(); 
-	
+	private Set<Pokemon> pokemonsWeaknesses = new HashSet<>();
 
-	
 	public Type(String name) {
 		super();
 		this.name = name;
 	}
-	
-	
 
+	
 }
