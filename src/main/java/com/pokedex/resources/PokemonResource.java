@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import com.pokedex.entities.Pokemon;
 import com.pokedex.entities.forms.PokemonForm;
 import com.pokedex.service.PokemonService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/pokemons")
 public class PokemonResource {
@@ -49,23 +51,21 @@ public class PokemonResource {
 	}
 
 	@GetMapping("/type")
-	public ResponseEntity<Page<Pokemon>> getAllPokemons(@Param("id") Integer id, @Param("page") Pageable pageable) {
+	public ResponseEntity<Page<Pokemon>> getPokemonsByType(@Param("id") Integer id, @Param("page") Pageable pageable) {
 		Page<Pokemon> pokemons = service.findAllByType(id, pageable);
 		return ResponseEntity.status(HttpStatus.OK).body(pokemons);
 	}
 
 	@PostMapping
-	public ResponseEntity<PokemonForm> savePokemon(@RequestBody @Valid PokemonForm pokemonForm) {
+	public ResponseEntity<PokemonForm> createPokemon(@RequestBody @Valid PokemonForm pokemonForm) {
 
-		Pokemon pokemon = pokemonForm.novoPokemon();
-		
-		Pokemon pokemonSave = service.save(pokemon);
+		Pokemon pokemonSave = service.save(pokemonForm.novoPokemon());
 		
 		PokemonForm pokemonFormSave =  new PokemonForm(pokemonSave.getId(), pokemonSave.getName(), pokemonSave.getHeight(),
 				pokemonSave.getWeight(), pokemonSave.getGender(), pokemonSave.getImgUrl(), pokemonSave.getTypes(),
 				pokemonSave.getWeaknesses(), pokemonSave.getNextEvolution(), pokemonSave.getPreviusEvolution());
 
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(pokemon.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(pokemonSave.getId()).toUri();
 		
 		return ResponseEntity.created(uri).body(pokemonFormSave);
 	}

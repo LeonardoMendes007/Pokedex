@@ -57,6 +57,7 @@ public class Pokemon implements Serializable {
 	private Set<Type> types = new HashSet<>();
 
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(name = "pokemon_weaknesses", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "weakness_id"))
 	private Set<Type> weaknesses = new HashSet<>();
 

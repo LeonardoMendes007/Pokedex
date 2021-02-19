@@ -30,7 +30,7 @@ public class Type {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@NotBlank
-	@Column(length = 20)
+	@Column(length = 20, unique = true)
 	private String name;
 
 	@ManyToMany(mappedBy = "types")
