@@ -29,25 +29,33 @@ public class TypeService {
 
 	public Type save(Type type) {
 
-		if (repType.existsById(type.getId())) {
+		try {
+			Type typeSave = repType.save(type);
 
-			throw new DatabaseException("There is already a Type with the same number. Number = " + type.getId());
+			return typeSave;
+		} catch (DataIntegrityViolationException e) {
 
-		} else {
-
-			try {
-				Type typeSave = repType.save(type);
-
-				return typeSave;
-			} catch (DataIntegrityViolationException e) {
-
-				throw new DatabaseConstraintViolationException(
-						"There is already a pokemon with the same name. Name = " + type.getName());
-
-			}
+			throw new DatabaseConstraintViolationException(
+					"There is already a pokemon with the same name. Name = " + type.getName());
 
 		}
 
 	}
+
+	public Type update(Integer id, Type newType) {
+		Type oldType = repType.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id " + id + " does not exist"));
+		oldType.setName(newType.getName());
+		return repType.save(oldType);
+	}
+	
+	public void delete(Integer id) {
+		Type type = repType.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id " + id + " does not exist"));
+		try {
+			repType.delete(type);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseConstraintViolationException("It is not possible to exclude the type with id = " + id + ", as the type has one or more related Pokémons.");
+		}
+	}
+
 
 }
