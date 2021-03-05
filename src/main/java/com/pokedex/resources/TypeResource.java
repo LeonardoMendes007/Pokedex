@@ -60,11 +60,13 @@ public class TypeResource {
 	
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Type> createType(@PathVariable("id") Integer id, @Valid @RequestBody TypeForm typeForm){
+	public ResponseEntity<TypeForm> updateType(@PathVariable("id") Integer id, @Valid @RequestBody TypeForm typeForm){
 		
         Type type = service.update(id, typeForm.novoType());
+        
+        TypeForm newTypeForm = new TypeForm(type.getId(), type.getName(), type.getPokemonsTypes(), type.getPokemonsWeaknesses());
 		
-		return ResponseEntity.status(HttpStatus.OK).body(type);
+		return ResponseEntity.status(HttpStatus.OK).body(newTypeForm);
 	}
 	
 	@DeleteMapping("/{id}")

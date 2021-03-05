@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.pokedex.entities.Pokemon;
+import com.pokedex.entities.Type;
+import com.pokedex.entities.forms.PokemonForm;
 import com.pokedex.repositories.PokemonRepository;
 import com.pokedex.service.exception.DatabaseConstraintViolationException;
 import com.pokedex.service.exception.DatabaseException;
@@ -66,6 +68,33 @@ public class PokemonService {
 			
 		}
 		
+		
+		
+	}
+
+	public Pokemon update(Integer id, Pokemon newPokemon) {
+		
+		Pokemon oldPokemon = repPokemon.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id " + id + " does not exist"));
+		oldPokemon.setName(newPokemon.getName());
+		oldPokemon.setGender(newPokemon.getGender());
+		oldPokemon.setHeight(newPokemon.getHeight());
+		oldPokemon.setWeight(newPokemon.getWeight());
+		oldPokemon.setImgUrl(newPokemon.getImgUrl());
+		oldPokemon.setTypes(newPokemon.getTypes());
+		oldPokemon.setWeaknesses(newPokemon.getWeaknesses());
+		oldPokemon.setNextEvolution(newPokemon.getNextEvolution());
+		oldPokemon.setPreviusEvolution(newPokemon.getPreviusEvolution());
+		return repPokemon.save(oldPokemon);
+		
+	}
+
+	public void delete(Integer id) {
+		Pokemon pokemon = repPokemon.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id " + id + " does not exist"));
+		try {
+			repPokemon.delete(pokemon);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseConstraintViolationException("It is not possible to exclude the type with id = " + id + ".");
+		}
 		
 		
 	}
